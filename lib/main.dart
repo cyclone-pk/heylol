@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:heylol/Provider/bottom_bar_navigation.dart';
 import 'package:heylol/Provider/home_page_provider.dart';
@@ -14,6 +15,13 @@ import 'Views/home_page.dart';
 import 'Views/profile_view.dart';
 import 'constants.dart';
 import 'models/trending_videos.dart';
+
+void _portraitModeOnly() {
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+}
 
 void main() {
   runApp(MultiProvider(providers: [
@@ -38,11 +46,14 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    _portraitModeOnly();
+
     Provider.of<UserProvider>(context).fetchUserData();
     TrendingVideos.fetchTrendingVideos();
     Provider.of<ChatsProvider>(context).fetchRecentChats();
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
           backgroundColor: kSecondaryColor,
           bottomNavigationBar: CustomNavigationBar(),
